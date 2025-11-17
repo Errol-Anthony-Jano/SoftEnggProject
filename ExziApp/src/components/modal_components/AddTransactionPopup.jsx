@@ -1,7 +1,5 @@
-import AddIncomeForm from '../form_components/AddIncomeForm.jsx'
-import AddExpenseForm from '../form_components/AddExpenseForm.jsx'
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
-import AddTransfer from '../form_components/AddTransfer.jsx'
+import TransactionForm from '../forms_general/TransactionForm.jsx'
 
 const AddTransactionPopup = () => {
     return (
@@ -13,13 +11,13 @@ const AddTransactionPopup = () => {
             </TabList>
             <TabPanels as="div" className="h-[90%]">
                 <TabPanel as="div" className="h-full">
-                    <AddIncomeForm />
+                    <TransactionForm transaction_type="income" inc_cat_label="Select category" />
                 </TabPanel>
                 <TabPanel as="div" className="h-full">
-                    <AddExpenseForm />
+                    <TransactionForm transaction_type="expense" inc_cat_label="Select source of funds" exp_dst_label="Select category" />
                 </TabPanel>
                 <TabPanel as="div" className="h-full">
-                    <AddTransfer />
+                    <TransactionForm transaction_type="transfer" transfer_dst_label="To" transfer_src_label="From" />
                 </TabPanel>
             </TabPanels>
         </TabGroup>
