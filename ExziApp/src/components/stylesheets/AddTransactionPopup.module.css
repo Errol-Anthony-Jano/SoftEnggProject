@@ -1,0 +1,14 @@
+.tab_switch {
+  width: 100%;
+}
+
+.tab_switch > button {
+  padding: 1rem;
+  width: 25%;
+  background: transparent;
+  border: 0;
+}
+
+.tab_switch > button:hover {
+  border-bottom: 1px solid white;
+}

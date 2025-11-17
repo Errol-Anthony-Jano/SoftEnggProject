@@ -1,0 +1,99 @@
+import { useEffect, useCallback } from "react"
+import { useOutletContext } from "react-router"
+import AddIncomeCategory from "../components/income_category_modals/AddIncomeCategory"
+import Button from "../components/Button"
+import ExpenseCategoryCard from "../components/cards/ExpenseCategoryCard"
+
+const categories = [
+  {
+    "key": 2,
+    "categoryName": "Food",
+    "categoryType": "Expense",
+    "currentBalance": 800,
+    "emoji": "🍔",
+    "isBudget": false,
+    "totalBudget": 0,
+    "currentSpend": 0
+  },
+  {
+    "key": 3,
+    "categoryName": "Rent",
+    "categoryType": "Expense",
+    "currentBalance": 1650,
+    "emoji": "🏠",
+    "isBudget": false,
+    "totalBudget": 0,
+    "currentSpend": 0
+  },
+  {
+    "key": 4,
+    "categoryName": "Transport",
+    "categoryType": "Expense",
+    "currentBalance": 250,
+    "emoji": "🚗",
+    "isBudget": false,
+    "totalBudget": 0,
+    "currentSpend": 0
+  },
+  {
+    "key": 5,
+    "categoryName": "Utilities",
+    "categoryType": "Expense",
+    "currentBalance": 180,
+    "emoji": "💡",
+    "isBudget": true,
+    "totalBudget": 0,
+    "currentSpend": 0
+  },
+  {
+    "key": 6,
+    "categoryName": "Subscriptions",
+    "categoryType": "Expense",
+    "currentBalance": 75,
+    "emoji": "📺",
+    "isBudget": true,
+    "totalBudget": 0,
+    "currentSpend": 0
+  },
+  {
+    "key": 7,
+    "categoryName": "Entertainment",
+    "categoryType": "Expense",
+    "currentBalance": 200,
+    "emoji": "🎬",
+    "isBudget": true,
+    "totalBudget": 0,
+    "currentSpend": 0
+  }
+]
+
+const ExpenseCategories = () => {
+    const { setHeaderButton, setModalType, setModalHeader } = useOutletContext()
+    
+    const openModal = useCallback(() => {
+        setModalType(<AddIncomeCategory />)
+        setModalHeader('Add expense category')
+    }, [setModalType, setModalHeader])
+    
+    useEffect(() => {
+        const addButton = <Button text="➕ Add expense category" onClick={openModal} />
+        setHeaderButton(addButton)
+
+        return () => {
+            setHeaderButton(null)
+        }
+    }, [setHeaderButton, openModal])
+
+    return (
+        <main className="flex flex-wrap gap-6 p-4">
+            {categories.map((category) => (
+                <ExpenseCategoryCard 
+                    key={category.categoryName} 
+                    category={category}        
+                />
+            ))}
+        </main>
+    )
+}
+
+export default ExpenseCategories
