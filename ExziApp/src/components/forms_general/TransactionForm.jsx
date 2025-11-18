@@ -16,6 +16,42 @@ const people = [
   { id: 5, name: 'Katelyn Rohan' },
 ]
 
+const IncomeSourceField = ({inc_cat_label, exp_src_label, transaction_type}) => {
+    return (
+        <Field as="div" className={`${transaction_type === 'expense' ? 'w-1/3' : 'w-1/2'} h-full flex flex-col`}>
+            <label>{inc_cat_label || exp_src_label}</label>
+            <CategorySelector categoryList={people}/>
+        </Field>
+    )
+}
+
+const ExpenseCategoryField = ({exp_dst_label}) => {
+    return (
+        <Field as="div" className="flex flex-col w-1/3 h-full">
+            <label>{exp_dst_label}</label>
+            <CategorySelector categoryList={people}/>
+        </Field>
+    )
+}
+
+const TransferSourceField = ({transfer_src_label}) => {
+    return (
+        <Field as="div" className="flex flex-col w-1/2">
+            <label>{transfer_src_label}</label>
+            <CategorySelector categoryList={people}/>
+        </Field>
+    )
+}
+
+const TransferDestField = ({transfer_dst_label}) => {
+    return (
+        <Field as="div" className="flex flex-col w-1/2">
+            <label>{transfer_dst_label}</label>
+            <CategorySelector categoryList={people}/>
+        </Field>
+    )
+}
+
 const TransactionForm = ({transaction_type, inc_cat_label, exp_src_label, exp_dst_label, transfer_src_label, transfer_dst_label}) => {
     return (
         <div className="h-full flex flex-col p-4 gap-4">
@@ -23,18 +59,10 @@ const TransactionForm = ({transaction_type, inc_cat_label, exp_src_label, exp_ds
                 {
                     (transaction_type === 'income' || transaction_type === 'expense') && (
                         <>
-                            <Field as="div" className={`${transaction_type === 'expense' ? 'w-1/3' : 'w-1/2'} h-full flex flex-col`}>
-                                <label>{inc_cat_label}</label>
-                                <CategorySelector categoryList={people}/>
-                            </Field>
-                            {
-                                transaction_type === 'expense' && (
-                                    <Field as="div" className="flex flex-col w-1/3 h-full">
-                                        <label>{exp_dst_label}</label>
-                                        <CategorySelector categoryList={people}/>
-                                    </Field>
-                                )
-                            }
+                            <IncomeSourceField inc_cat_label={inc_cat_label} exp_src_label={exp_src_label} transaction_type={transaction_type}/>
+
+                            { transaction_type === 'expense' && <ExpenseCategoryField exp_dst_label={exp_dst_label}/>}
+
                             <Field as="div" className={`${transaction_type === 'expense' ? 'w-1/3' : 'w-1/2'} h-full flex flex-col`}>
                                 <label>Select date</label>
                                 <TranscDatePicker />
@@ -45,14 +73,8 @@ const TransactionForm = ({transaction_type, inc_cat_label, exp_src_label, exp_ds
                 {
                     (transaction_type === "transfer") && (
                         <div className="flex justify-between w-full gap-4 h-full">
-                            <Field as="div" className="flex flex-col w-1/2">
-                                <label>{transfer_src_label}</label>
-                                <CategorySelector categoryList={people}/>
-                            </Field>
-                            <Field as="div" className="flex flex-col w-1/2">
-                                <label>{transfer_dst_label}</label>
-                                <CategorySelector categoryList={people}/>
-                            </Field>
+                            <TransferSourceField transfer_src_label={transfer_src_label} />
+                            <TransferDestField transfer_dst_label={transfer_dst_label} />
                         </div>
                     )
                 }
