@@ -41,7 +41,7 @@ const emojiIcons = [
 
 const setBudget = ["Yes", "No"]
 
-const IncomeCategoryModal = ({type, mode, name_label, icon_pick_label}) => {
+const CategoryForm = ({type, mode, name_label, icon_pick_label}) => {
     const [currIcon, selectIcon] = useState(emojiIcons[0])
     const [selected, setSelected] = useState(setBudget[1])
     
@@ -71,4 +71,4 @@ const IncomeCategoryModal = ({type, mode, name_label, icon_pick_label}) => {
     )
 }
 
-export default IncomeCategoryModal
+export default CategoryForm

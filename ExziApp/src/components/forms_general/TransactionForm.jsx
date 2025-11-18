@@ -13,6 +13,7 @@ const TransactionForm = ({transaction_type, inc_cat_label, exp_src_label, exp_ds
                         <DatePicker transaction_type={transaction_type} />
                     </>
                 )
+            case 'expected_expense':
             case 'expense':
                 return (
                     <>
