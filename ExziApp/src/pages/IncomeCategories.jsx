@@ -5,6 +5,8 @@ import Button from "../components/Button"
 import IncomeCategoryCard from "../components/cards/IncomeCategoryCard"
 import { ModalContext } from "../contexts/ModalContext"
 import CategoryForm from "../components/forms_general/CategoryForm.jsx"
+import BaseCard from "../components/cards/BaseCard.jsx"
+import { MenuContext } from "../contexts/MenuContext.js"
 
 
 const categories = [
@@ -86,9 +88,11 @@ const IncomeCategories = () => {
     return (
         <main className="flex flex-wrap gap-6 p-4">
             {categories.map((category) => (
-                <IncomeCategoryCard 
-                    key={category.categoryName} 
-                    category={category}        
+                <BaseCard 
+                    type="income" 
+                    name={category.categoryName}
+                    icon={category.emoji}
+                    total_income={category.currentBalance} 
                 />
             ))}
         </main>
