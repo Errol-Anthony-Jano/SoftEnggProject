@@ -1,8 +1,9 @@
-import { useEffect, useCallback } from "react"
+import { useEffect, useCallback, useMemo } from "react"
 import { useOutletContext } from "react-router"
-import AddIncomeCategory from "../components/income_category_modals/AddIncomeCategory"
+import CategoryForm from "../components/forms_general/CategoryForm.jsx"
 import Button from "../components/Button"
 import ExpenseCategoryCard from "../components/cards/ExpenseCategoryCard"
+import { ModalContext } from "../contexts/ModalContext"
 
 const categories = [
   {
@@ -69,12 +70,12 @@ const categories = [
 
 const ExpenseCategories = () => {
     const { setHeaderButton, setModalType, setModalHeader } = useOutletContext()
-    
+  
     const openModal = useCallback(() => {
-        setModalType(<AddIncomeCategory />)
+        setModalType(<CategoryForm type="expense" name_label="Enter name" icon_pick_label="Select icon"/>)
         setModalHeader('Add expense category')
     }, [setModalType, setModalHeader])
-    
+       
     useEffect(() => {
         const addButton = <Button text="➕ Add expense category" onClick={openModal} />
         setHeaderButton(addButton)

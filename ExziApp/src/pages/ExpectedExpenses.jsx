@@ -5,6 +5,7 @@ import AddExpectedExpenseForm from "../components/form_components/AddExpectedExp
 import ExpectedExpenseCard from "../components/cards/ExpectedExpenseCard.jsx"
 import EditExpectedExpense from "../components/menus/EditExpectedExpense.jsx"
 import { ModalContext } from "../contexts/ModalContext.js"
+import TransactionForm from "../components/forms_general/TransactionForm.jsx"
 
 const expected_expenses = [
   {
@@ -83,9 +84,8 @@ const ExpectedExpenses = () => {
     const {setHeaderButton, setModalType, setModalHeader} = useOutletContext()
 
     const openExpectedExpenseModal = useCallback(() => {
-        setModalType(<AddExpectedExpenseForm />)
+        setModalType(<TransactionForm transaction_type="expected_expense" inc_cat_label="Select income source" exp_dst_label="Select category"/>)
         setModalHeader("Add expected expense")
-        //add submit and cancel trigger functions
     }, [setModalHeader, setModalType])
 
     const modalContext = useMemo(() => ({
@@ -103,16 +103,15 @@ const ExpectedExpenses = () => {
     }, [setHeaderButton, openExpectedExpenseModal])
 
     return (
-      <ModalContext.Provider value={modalContext}>
         <main className="h-full w-full overflow-y-scroll">
             <div className="h-[10%] w-full p-8 sticky top-0 bg-[#0b1215] z-[20]">
-              <div className="grid gap-4 grid-cols-6 grid-rows-1 w-[90%]">
-                <h3 className="col-start-1 col-end-2">Name</h3>
-                <h3 className="col-start-2 col-end-3">Amount</h3>
-                <h3 className="col-start-3 col-end-4">Deadline</h3>
-                <h3 className="col-start-4 col-end-5">Spent from</h3>
-                <h3 className="col-start-5 col-end-6">Recorded to</h3>
-                <h3 className="col-start-6 col-end-7">Status</h3>
+                <div className="grid gap-4 grid-cols-6 grid-rows-1 w-[90%]">
+                    <h3 className="col-start-1 col-end-2">Name</h3>
+                    <h3 className="col-start-2 col-end-3">Amount</h3>
+                    <h3 className="col-start-3 col-end-4">Deadline</h3>
+                    <h3 className="col-start-4 col-end-5">Spent from</h3>
+                    <h3 className="col-start-5 col-end-6">Recorded to</h3>
+                    <h3 className="col-start-6 col-end-7">Status</h3>
                 </div>
             </div>
             <div className="flex flex-col w-full h-[90%] gap-4 p-4">
@@ -123,7 +122,6 @@ const ExpectedExpenses = () => {
                 }
             </div>
         </main>
-      </ModalContext.Provider>
     )
 }
 
