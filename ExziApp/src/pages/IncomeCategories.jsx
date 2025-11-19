@@ -1,12 +1,9 @@
 import { useEffect, useCallback, useMemo } from "react"
 import { useOutletContext } from "react-router"
-import AddIncomeCategory from "../components/income_category_modals/AddIncomeCategory"
 import Button from "../components/Button"
-import IncomeCategoryCard from "../components/cards/IncomeCategoryCard"
 import { ModalContext } from "../contexts/ModalContext"
 import CategoryForm from "../components/forms_general/CategoryForm.jsx"
 import BaseCard from "../components/cards/BaseCard.jsx"
-import { MenuContext } from "../contexts/MenuContext.js"
 
 
 const categories = [
@@ -71,24 +68,25 @@ const categories = [
 const IncomeCategories = () => {
     const { setHeaderButton, setModalType, setModalHeader } = useOutletContext()
     
-    const openModal = useCallback(() => {
+    const openAddModal = useCallback(() => {
         setModalType(<CategoryForm type="income" mode="add" name_label="Enter name" icon_pick_label="Select icon"/>)
         setModalHeader('Add income category')
     }, [setModalType, setModalHeader])
 
     useEffect(() => {
-        const addButton = <Button text="➕ Add income category" onClick={openModal} />
+        const addButton = <Button text="➕ Add income category" onClick={openAddModal} />
         setHeaderButton(addButton)
 
         return () => {
             setHeaderButton(null)
         }
-    }, [setHeaderButton, openModal])
+    }, [setHeaderButton, openAddModal])
 
     return (
         <main className="flex flex-wrap gap-6 p-4">
             {categories.map((category) => (
                 <BaseCard 
+                    key={category.key}
                     type="income" 
                     name={category.categoryName}
                     icon={category.emoji}

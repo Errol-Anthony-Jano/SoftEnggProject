@@ -2,8 +2,8 @@ import { useEffect, useCallback, useMemo } from "react"
 import { useOutletContext } from "react-router"
 import CategoryForm from "../components/forms_general/CategoryForm.jsx"
 import Button from "../components/Button"
-import ExpenseCategoryCard from "../components/cards/ExpenseCategoryCard"
 import { ModalContext } from "../contexts/ModalContext"
+import BaseCard from "../components/cards/BaseCard.jsx"
 
 const categories = [
   {
@@ -71,26 +71,30 @@ const categories = [
 const ExpenseCategories = () => {
     const { setHeaderButton, setModalType, setModalHeader } = useOutletContext()
   
-    const openModal = useCallback(() => {
-        setModalType(<CategoryForm type="expense" name_label="Enter name" icon_pick_label="Select icon"/>)
+    const openAddModal = useCallback(() => {
+        setModalType(<CategoryForm type="expense" mode="add" name_label="Enter name" icon_pick_label="Select icon"/>)
         setModalHeader('Add expense category')
     }, [setModalType, setModalHeader])
        
     useEffect(() => {
-        const addButton = <Button text="➕ Add expense category" onClick={openModal} />
+        const addButton = <Button text="➕ Add expense category" onClick={openAddModal} />
         setHeaderButton(addButton)
 
         return () => {
             setHeaderButton(null)
         }
-    }, [setHeaderButton, openModal])
+    }, [setHeaderButton, openAddModal])
 
     return (
         <main className="flex flex-wrap gap-6 p-4">
             {categories.map((category) => (
-                <ExpenseCategoryCard 
-                    key={category.categoryName} 
-                    category={category}        
+                <BaseCard
+                    key={category.key} 
+                    type="expense"
+                    name={category.categoryName}
+                    icon={category.emoji}
+                    isBudget={category.isBudget}
+                    spend_limit={category.totalBudget}
                 />
             ))}
         </main>
