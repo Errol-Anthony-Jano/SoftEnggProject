@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useMemo } from "react"
+import { useEffect, useCallback, useState} from "react"
 import { useOutletContext } from "react-router"
 import Button from "../components/Button"
 import { ModalContext } from "../contexts/ModalContext"
@@ -8,65 +8,66 @@ import BaseCard from "../components/cards/BaseCard.jsx"
 
 const categories = [
   {
-    key: 1,
+    id: 1,
     categoryName: 'Salary',
     categoryType: 'Income',
-    currentBalance: 5200,
+    total_income: 5200,
     emoji: '💵',
   },
   {
-    key: 2,
+    id: 2,
     categoryName: 'Food',
     categoryType: 'Expense', // Changed from 'Income' as it's a more common use case
-    currentBalance: 800,
+    total_income: 800,
     emoji: '🍔',
   },
   {
-    key: 3,
+    id: 3,
     categoryName: 'Rent',
     categoryType: 'Expense',
-    currentBalance: 1650,
+    total_income: 1650,
     emoji: '🏠',
   },
   {
-    key: 4,
+    id: 4,
     categoryName: 'Transport',
     categoryType: 'Expense',
-    currentBalance: 250,
+    total_income: 250,
     emoji: '🚗',
   },
   {
-    key: 5,
+    id: 5,
     categoryName: 'Utilities',
     categoryType: 'Expense',
-    currentBalance: 180,
+    total_income: 180,
     emoji: '💡',
   },
   {
-    key: 6,
+    id: 6,
     categoryName: 'Subscriptions',
     categoryType: 'Expense',
-    currentBalance: 75,
+    total_income: 75,
     emoji: '📺',
   },
   {
-    key: 7,
+    id: 7,
     categoryName: 'Entertainment',
     categoryType: 'Expense',
-    currentBalance: 200,
+    total_income: 200,
     emoji: '🎬',
   },
   {
-    key: 8,
+    id: 8,
     categoryName: 'Freelance',
     categoryType: 'Income',
-    currentBalance: 600,
+    total_income: 600,
     emoji: '💼',
   }
 ];
 
 const IncomeCategories = () => {
     const { setHeaderButton, setModalType, setModalHeader } = useOutletContext()
+    const [displayMode, setDisplayMode] = useState("monthly")
     
     const openAddModal = useCallback(() => {
         setModalType(<CategoryForm type="income" mode="add" name_label="Enter name" icon_pick_label="Select icon"/>)
@@ -82,15 +83,25 @@ const IncomeCategories = () => {
         }
     }, [setHeaderButton, openAddModal])
 
+    const toggleMode = useCallback((mode) => {
+      setDisplayMode(mode)
+    }, [setDisplayMode])
+
     return (
         <main className="flex flex-wrap gap-6 p-4">
+          <div className="w-full flex justify-between">
+            <p>Set display mode</p>
+            <div className="flex gap-4">
+              <button className="p-2 border border-white rounded-lg" onClick={() => toggleMode('monthly')}>Monthly</button>
+              <button className="p-2 border border-white rounded-lg" onClick={() => toggleMode('all-time')}>All-time</button>
+            </div>
+          </div>
             {categories.map((category) => (
                 <BaseCard 
-                    key={category.key}
+                    key={category.id}
                     type="income" 
-                    name={category.categoryName}
-                    icon={category.emoji}
-                    total_income={category.currentBalance} 
+                    income_cat={category}
+                    display_mode={displayMode}
                 />
             ))}
         </main>

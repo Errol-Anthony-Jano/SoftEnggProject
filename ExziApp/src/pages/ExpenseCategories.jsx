@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useMemo } from "react"
+import { useEffect, useCallback, useState } from "react"
 import { useOutletContext } from "react-router"
 import CategoryForm from "../components/forms_general/CategoryForm.jsx"
 import Button from "../components/Button"
@@ -70,6 +70,7 @@ const categories = [
 
 const ExpenseCategories = () => {
     const { setHeaderButton, setModalType, setModalHeader } = useOutletContext()
+    const [displayMode, setDisplayMode] = useState("monthly")
   
     const openAddModal = useCallback(() => {
         setModalType(<CategoryForm type="expense" mode="add" name_label="Enter name" icon_pick_label="Select icon"/>)
@@ -85,16 +86,25 @@ const ExpenseCategories = () => {
         }
     }, [setHeaderButton, openAddModal])
 
+    const toggleMode = useCallback((mode) => {
+      setDisplayMode(mode)
+    }, [setDisplayMode])
+
     return (
         <main className="flex flex-wrap gap-6 p-4">
+          <div className="w-full flex justify-between">
+            <p>Set display mode</p>
+            <div className="flex gap-4">
+              <button className="p-2 border border-white rounded-lg" onClick={() => toggleMode('monthly')}>Monthly</button>
+              <button className="p-2 border border-white rounded-lg" onClick={() => toggleMode('all-time')}>All-time</button>
+            </div>
+          </div>
             {categories.map((category) => (
                 <BaseCard
                     key={category.key} 
                     type="expense"
-                    name={category.categoryName}
-                    icon={category.emoji}
-                    isBudget={category.isBudget}
-                    spend_limit={category.totalBudget}
+                    expense_cat={category}
+                    display_mode={displayMode}
                 />
             ))}
         </main>
