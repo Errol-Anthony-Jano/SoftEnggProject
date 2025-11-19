@@ -1,8 +1,9 @@
+//DO NOT DELETE
+
 import { VscKebabVertical } from "react-icons/vsc"
 import PaymentStatusSelector from "../form_components/PaymentStatusSelector"
 import EditExpectedExpense from "../menus/EditExpectedExpense"
 import CategorySelector from "../form_components/CategorySelector"
-import { useContext } from "react"
 
 const people = [
   { id: 1, name: 'Durward Reynolds' },
@@ -15,7 +16,7 @@ const people = [
 const ExpectedExpenseCard = ({expected_expense}) => {
     return (
         <div className="flex w-full bg-[#0d1518] items-center justify-between">
-            <div className="grid  grid-cols-6 grid-rows-1 rounded-lg gap-4 w-[90%] p-4 sticky">
+            <div className="grid  grid-cols-6 grid-rows-1 rounded-lg gap-4 w-[80%] p-4 sticky">
                 <p className="col-start-1 col-end-2">{expected_expense.title}</p>
                 <p className="col-start-2 col-end-3">{expected_expense.amount}</p>
                 <p className="col-start-3 col-end-4">{expected_expense.deadline}</p>
@@ -29,7 +30,8 @@ const ExpectedExpenseCard = ({expected_expense}) => {
                     <PaymentStatusSelector />
                 </div>
             </div>
-            <div className="flex w-[10%] items-center flex-row-reverse p-4">
+            <div className="flex w-[20%] items-center p-4 justify-around">
+                <button className="p-2 bg-[#447083] rounded-lg">Pay here</button>
                 <EditExpectedExpense expected_expense={expected_expense}/>
             </div>
         </div>
