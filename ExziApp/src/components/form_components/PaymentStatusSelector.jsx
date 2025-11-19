@@ -8,7 +8,6 @@ const PaymentStatusSelector = () => {
         <Listbox as="div" className="w-full h-full" value={currStatus} onChange={setStatus}>
             <ListboxButton className="w-full h-full border border-[#646464] rounded-sm data-focus:border-white hover:border hover:border-white hover:transition duration-300 ease-in-out">{currStatus}</ListboxButton>
             <ListboxOptions anchor="bottom" className="z-[1001] w-(--button-width) border border-[#646464] rounded-sm">
-
                 <ListboxOption key='1' value="Pending" className="bg-black data-focus:bg-[#0b1215] p-2">
                     Pending
                 </ListboxOption>
