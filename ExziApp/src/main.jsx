@@ -6,8 +6,6 @@ import App from './App.jsx'
 import PageContent from './components/top_level_components/PageContent.jsx'
 import DashboardContent from './pages/DashboardContent.jsx';
 import AnalyticsContent from './pages/AnalyticsContent.jsx';
-import Categories from './pages/Categories.jsx'
-import Profile from './pages/Profile.jsx'
 import ExpectedExpenses from './pages/ExpectedExpenses.jsx'
 import IncomeCategories from './pages/IncomeCategories.jsx';
 import ExpenseCategories from './pages/ExpenseCategories.jsx';
@@ -60,14 +58,6 @@ const router = createBrowserRouter([
               path: 'analytics',
               element: <AnalyticsContent/>
             },
-            {
-              handle: {
-                main_msg: "Profile",
-                sub_msg: "Edit your personal information here"
-              },
-              path: 'profile',
-              element: <Profile/>
-            }
           ]
         }
       ]
