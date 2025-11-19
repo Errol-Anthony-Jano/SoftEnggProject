@@ -46,24 +46,6 @@ export const TransferDestField = ({transfer_dst_label}) => {
     )
 }
 
-export const BudgetSetter = ({budget_set_label}) => {
-    const [enabled, setEnabled] = useState(false)
-
-    return (
-        <div className="flex justify-between items-center h-full w-full">
-            <label>{budget_set_label}</label>
-            <Switch
-                checked={enabled}
-                onChange={setEnabled}
-                className="group inline-flex h-6 w-11 items-center rounded-full bg-gray-200 transition data-checked:bg-blue-600"
-            >
-                <span className="size-4 translate-x-1 rounded-full bg-white transition group-data-checked:translate-x-6" />
-            </Switch>
-            <Input className="w-1/2 border border-[#646464] rounded-sm hover:border hover:border-white hover:transition duration-300 ease-in-out"></Input>
-        </div>
-    )
-}
-
 export const DatePicker = ({transaction_type}) => {
     return (
         <Field as="div" className={`${transaction_type === 'expense' ? 'w-1/3' : 'w-1/2'} h-full flex flex-col`}>

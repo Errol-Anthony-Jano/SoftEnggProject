@@ -1,5 +1,8 @@
 import { Input, Field, RadioGroup } from "@headlessui/react"
 import { useState } from 'react'
+import { CategoryNameField, IconPicker } from "./CategoryFormComponents";
+import Icon from "@mui/material/Icon";
+import { BudgetSetter } from "./CategoryFormComponents.jsx";
 
 const emojiIcons = [
   // --- Income & Business ---
@@ -39,34 +42,60 @@ const emojiIcons = [
   "📎", "✏️", "🕊️", "🙏"
 ];
 
-const setBudget = ["Yes", "No"]
+
 
 const CategoryForm = ({type, mode, name_label, icon_pick_label}) => {
     const [currIcon, selectIcon] = useState(emojiIcons[0])
-    const [selected, setSelected] = useState(setBudget[1])
+
+    const renderSection = () => {
+        switch(mode) {
+            case 'add':
+                if (type === 'income') {
+                    return (
+                        <>
+                            <CategoryNameField name_label="Enter name" />
+                            <IconPicker type="income" icon_pick_label="Select icon" />
+                        </>
+                    )
+                }
+                else {
+                    return (
+                        <>
+                            <CategoryNameField name_label="Enter name" />
+                            <BudgetSetter budget_set_label="Enable budget limit?" budget_enter_amount="Enter limit" />
+                            <IconPicker type="income" icon_pick_label="Select icon" />
+                        </>
+                    )
+                }
+            case 'update':
+                if (type === 'income') {
+                    return (
+                        <>
+                            <CategoryNameField name_label="Enter name" />
+                            <IconPicker type="income" icon_pick_label="Select icon" />
+                        </>
+                    )
+                }
+                else {
+                    return (
+                        <>
+                            <CategoryNameField name_label="Enter name" />
+                            <IconPicker type="income" icon_pick_label="Select icon" />
+                        </>
+                    )
+                }
+            case 'budget_toggle':
+                return (
+                    <>
+                        <BudgetSetter budget_set_label="Set budget limit?" budget_enter_amount="Enter amount" />
+                    </>
+                )
+        }
+    }
     
     return (
         <div className="h-full flex flex-col gap-4 p-4">
-            <div className="flex gap-4 h-[20%]">
-                <Field as="div" className="flex flex-col gap-2 w-full h-full">
-                    <label>{name_label}</label>
-                    <Input className="border border-[#646464] rounded-sm hover:border hover:border-white hover:transition duration-300 ease-in-out h-full"/>
-                </Field>
-            </div>
-            {
-                type === 'expense' && mode === "add" && (
-                    <>
-                    </>
-                )
-            }
-            <Field as="div" className={`flex flex-col ${type === 'expense' ? 'h-[60%]' : 'h-[70%]'}`}>
-                <label>{icon_pick_label}</label>
-                <div className="w-full flex flex-wrap overflow-y-scroll gap-2 p-4 flex-grow">
-                    {emojiIcons.map((icon) => (
-                        <button key={icon} className="text-4xl hover:bg-[#101a1e] rounded-sm" type="button" onClick={() => {console.log(icon)}}>{icon}</button>
-                    ))}
-                </div>
-            </Field>
+            {renderSection()}
         </div>
     )
 }

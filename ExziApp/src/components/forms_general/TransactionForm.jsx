@@ -1,6 +1,6 @@
 import { Field, Input, Textarea, Switch } from '@headlessui/react'
 import TranscDatePicker from '../form_components/TranscDatePicker'
-import {DatePicker, IncomeSourceField, ExpenseCategoryField, TransferSourceField, TransferDestField, BudgetSetter} from './TransactionFormComponents'
+import {DatePicker, IncomeSourceField, ExpenseCategoryField, TransferSourceField, TransferDestField} from './TransactionFormComponents'
 
 const TransactionForm = ({transaction_type, inc_cat_label, exp_src_label, exp_dst_label, transfer_src_label, transfer_dst_label}) => {
 
@@ -37,18 +37,13 @@ const TransactionForm = ({transaction_type, inc_cat_label, exp_src_label, exp_ds
             <div className="flex justify-between w-full gap-4 shrink-0">
                 {renderSection()}
             </div>
-            {
-                <div className="shrink-0">
-                    {transaction_type === 'expense' && <BudgetSetter budget_set_label="Set budget?" />}
-                </div>
-            }
             <Field as="div" className="flex flex-col shrink-0">
                 <label>Enter amount</label>
-                <Input className="border border-[#646464] rounded-sm hover:border hover:border-white hover:transition duration-300 ease-in-out grow"/>
+                <Input className="p-4 border border-[#646464] rounded-sm hover:border hover:border-white hover:transition duration-300 ease-in-out grow"/>
             </Field>
             <Field as="div" className="flex flex-col shrink-0 grow">
                 <label>Enter note</label>
-                <Textarea className="border border-[#646464] rounded-sm hover:border hover:border-white hover:transition duration-300 ease-in-out grow"/>
+                <Textarea className="p-4 border border-[#646464] rounded-sm hover:border hover:border-white hover:transition duration-300 ease-in-out grow"/>
             </Field>
         </div>
     )
