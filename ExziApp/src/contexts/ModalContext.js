@@ -1,9 +1,5 @@
-import { createContext, useContext } from "react";
+import { createContext } from "react";
 
-export const ModalContext = createContext(null)
+export const ModalContext = createContext()
 
-export const useModal = (() => {
-    const context = useContext(ModalContext)
-
-    return context
-})
+export const WarningModalContext = createContext()
