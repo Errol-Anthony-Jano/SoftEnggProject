@@ -9,6 +9,7 @@ import AnalyticsContent from './pages/AnalyticsContent.jsx';
 import ExpectedExpenses from './pages/ExpectedExpenses.jsx'
 import IncomeCategories from './pages/IncomeCategories.jsx';
 import ExpenseCategories from './pages/ExpenseCategories.jsx';
+import Transactions from './pages/Transactions.jsx';
 
 const router = createBrowserRouter([
     {
@@ -28,8 +29,8 @@ const router = createBrowserRouter([
             },
             {
               handle: {
-                main_msg: "Income Categories",
-                sub_msg: "Your income categories"
+                main_msg: "Income Sources",
+                sub_msg: "Your sources of income"
               },
               path: 'income_categories',
               element: <IncomeCategories />
@@ -57,6 +58,14 @@ const router = createBrowserRouter([
               },
               path: 'analytics',
               element: <AnalyticsContent/>
+            },
+            {
+              handle: {
+                main_msg: "Records",
+                sub_msg: "View your list of records"
+              },
+              path: 'transactions',
+              element: <Transactions />
             },
           ]
         }
