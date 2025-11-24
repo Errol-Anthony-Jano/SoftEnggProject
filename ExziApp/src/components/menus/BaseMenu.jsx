@@ -6,7 +6,7 @@ import CategoryForm from "../forms_general/CategoryForm.jsx"
 import { DialogContext } from '../../contexts/DialogContext.js'
 import BaseDialog from '../dialogs/BaseDialog.jsx'
 
-const BaseMenu = ({category_type}) => {
+const BaseMenu = ({category_type, category_obj}) => {
 
     const {setModalType, setModalHeader} = useContext(ModalContext)
     const {setDialogType} = useContext(DialogContext)
@@ -57,7 +57,7 @@ const BaseMenu = ({category_type}) => {
                         </MenuItem>
                         <MenuItem>
                             <button className="block bg-[#0b1215] data-focus:bg-gray-900 p-2 w-full" onClick={openToggleBudgetForm}>
-                                Toggle budget limits
+                                Edit/toggle budget limits
                             </button>
                         </MenuItem>
                     </>
@@ -66,7 +66,7 @@ const BaseMenu = ({category_type}) => {
                 return (
                     <>
                         <MenuItem>
-                            <button className="block data-focus:bg-gray-900 p-2 w-full" onClick={openEditModal}>
+                            <button className="block data-focus:bg-gray-900 p-2 w-full">
                                 Edit reserved expense
                             </button>
                         </MenuItem>
