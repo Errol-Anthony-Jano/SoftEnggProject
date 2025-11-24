@@ -49,12 +49,13 @@ export const CategoryNameField = ({name_label}) => {
 }
 
 export const IconPicker = ({type, icon_pick_label}) => {
+    const [currentIcon, setCurrentIcon] = useState(emojiIcons[0])
     return (
         <Field as="div" className={`flex flex-col min-h-0`}>
             <label>{icon_pick_label}</label>
             <div className="w-full flex flex-wrap overflow-y-scroll gap-2 p-4 grow">
                 {emojiIcons.map((icon) => (
-                    <button key={icon} className="text-4xl hover:bg-[#101a1e] rounded-sm" type="button" onClick={() => {console.log(icon)}}>{icon}</button>
+                    <button onClick={() => setCurrentIcon(icon)} key={icon} className={`${icon === currentIcon ? 'bg-blue-300' : ''} text-4xl hover:bg-[#101a1e] rounded-sm`} type="button">{icon}</button>
                 ))}
             </div>
         </Field>
