@@ -92,13 +92,6 @@ const ExpenseCategories = () => {
 
     return (
         <main className="flex flex-wrap gap-6 p-4">
-          <div className="w-full flex justify-between">
-            <p>Set display mode</p>
-            <div className="flex gap-4">
-              <button className="p-2 border border-white rounded-lg" onClick={() => toggleMode('monthly')}>Monthly</button>
-              <button className="p-2 border border-white rounded-lg" onClick={() => toggleMode('all-time')}>All-time</button>
-            </div>
-          </div>
             {categories.map((category) => (
                 <BaseCard
                     key={category.key} 

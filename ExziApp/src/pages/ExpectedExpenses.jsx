@@ -1,11 +1,9 @@
 import React, { createContext, useCallback, useEffect, useMemo, useState } from "react"
 import { useOutletContext } from 'react-router'
 import Button from "../components/Button.jsx"
-import AddExpectedExpenseForm from "../components/form_components/AddExpectedExpenseForm.jsx"
-import ExpectedExpenseCard from "../components/cards/ExpectedExpenseCard.jsx"
-import EditExpectedExpense from "../components/menus/EditExpectedExpense.jsx"
 import { ModalContext } from "../contexts/ModalContext.js"
 import TransactionForm from "../components/forms_general/TransactionForm.jsx"
+import ExpectedExpenseCard from "../components/cards/ExpectedExpenseCard.jsx"
 
 const expected_expenses = [
   {
@@ -105,7 +103,7 @@ const ExpectedExpenses = () => {
     return (
         <main className="h-full w-full overflow-y-scroll">
             <div className="h-[10%] w-full p-8 sticky top-0 bg-[#0b1215] z-[20]">
-                <div className="grid gap-4 grid-cols-6 grid-rows-1 w-[90%]">
+                <div className="grid gap-4 grid-cols-6 grid-rows-1 w-[80%]">
                     <h3 className="col-start-1 col-end-2">Name</h3>
                     <h3 className="col-start-2 col-end-3">Amount</h3>
                     <h3 className="col-start-3 col-end-4">Deadline</h3>
