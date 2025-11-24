@@ -4,6 +4,7 @@ import { VscKebabVertical } from "react-icons/vsc"
 import PaymentStatusSelector from "../form_components/PaymentStatusSelector"
 import EditExpectedExpense from "../menus/EditExpectedExpense"
 import CategorySelector from "../form_components/CategorySelector"
+import BaseMenu from "../menus/BaseMenu"
 
 const people = [
   { id: 1, name: 'Durward Reynolds' },
@@ -32,7 +33,7 @@ const ExpectedExpenseCard = ({expected_expense}) => {
             </div>
             <div className="flex w-[20%] items-center p-4 justify-around">
                 <button className="p-2 bg-[#447083] rounded-lg">Pay here</button>
-                <EditExpectedExpense expected_expense={expected_expense}/>
+                <BaseMenu category_type="reserved_expense" expected_expense={expected_expense}/>
             </div>
         </div>
     )
