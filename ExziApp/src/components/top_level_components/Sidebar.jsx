@@ -19,7 +19,7 @@ const Sidebar = () => {
                     </NavLink>
                     </li>
                     <li>
-                        <NavLink className={({isActive}) => `rounded-md transition-colors duration-200 no-underline p-4 block hover:bg-[#18272e] ${isActive ? 'bg-[#447083]' : ''}`} to="income_categories">💰 Income Categories</NavLink>
+                        <NavLink className={({isActive}) => `rounded-md transition-colors duration-200 no-underline p-4 block hover:bg-[#18272e] ${isActive ? 'bg-[#447083]' : ''}`} to="income_categories">💰 Income Sources</NavLink>
                     </li>
                     <li>
                         <NavLink className={({isActive}) => `rounded-md transition-colors duration-200 no-underline p-4 block hover:bg-[#18272e] ${isActive ? 'bg-[#447083]' : ''}`} to="expense_categories">💸 Expense Categories</NavLink>
@@ -31,7 +31,7 @@ const Sidebar = () => {
                         <NavLink className={({isActive}) => `rounded-md transition-colors duration-200 no-underline p-4 block hover:bg-[#18272e] ${isActive ? 'bg-[#447083]' : ''}`} to="analytics">📈 Analytics</NavLink>
                     </li>
                     <li>
-                        <NavLink className={({isActive}) => `rounded-md transition-colors duration-200 no-underline p-4 block hover:bg-[#18272e] ${isActive ? 'bg-[#447083]' : ''}`} to="/">🧾 My Transactions</NavLink>
+                        <NavLink className={({isActive}) => `rounded-md transition-colors duration-200 no-underline p-4 block hover:bg-[#18272e] ${isActive ? 'bg-[#447083]' : ''}`} to="transactions">🧾 Records</NavLink>
                     </li>
                 </ul>
             </nav>
