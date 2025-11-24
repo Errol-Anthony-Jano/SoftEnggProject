@@ -36,7 +36,6 @@ const IncomePieChart = ({isAnimationActive = true}) => {
         // This is the standard way to make recharts responsive
         <ResponsiveContainer width="100%" height='100%'> 
             <PieChart>
-                <Tooltip/>
                 <Legend layout="vertical" verticalAlign="middle" align='right'/>
                 <Pie
                     data={data}
