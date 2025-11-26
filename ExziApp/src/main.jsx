@@ -10,8 +10,19 @@ import ExpectedExpenses from './pages/ExpectedExpenses.jsx'
 import IncomeCategories from './pages/IncomeCategories.jsx';
 import ExpenseCategories from './pages/ExpenseCategories.jsx';
 import Transactions from './pages/Transactions.jsx';
+import LoginPage from './components/login_registration/LoginPage.jsx';
+import LoginContent from './LoginContent.jsx';
 
 const router = createBrowserRouter([
+    {
+      element: <LoginContent />,
+      children: [
+        {
+          path: 'login_registration',
+          element: <LoginPage />
+        }
+      ]
+    },
     {
       path: '/', 
       element: <App/>,
