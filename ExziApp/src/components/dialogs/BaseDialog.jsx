@@ -1,6 +1,6 @@
 import { MdClose } from "react-icons/md"
 
-const BaseDialog = ({dialog_type, icon, confirmButton, cancelButton, message, onClose, onConfirm}) => {
+const BaseDialog = ({dialog_type, icon, message, onClose}) => {
     return (
         <div className="flex justify-center items-center fixed inset-0 w-screen h-screen bg-black/90 z-[1999]">
             <div className="flex flex-col justify-between pointer-events-auto z-[1999] rounded-lg w-[30%] h-[30%] bg-[#040708] shadow-[0px_0px_5px_rgba(255,255,255,0.5)] p-4">
