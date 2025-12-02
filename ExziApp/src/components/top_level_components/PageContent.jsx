@@ -13,39 +13,31 @@ const PageContent = () => {
     const { main_msg, sub_msg } = handle || {};
 
     const [headerButton, setHeaderButton] = useState(null)
-    const [modalType, setModalType] = useState(null) // null -> no modal is to be shown
-    const [modalHeader, setModalHeader] = useState(null)
+    const [formType, setFormType] = useState(null) // null -> no modal is to be shown
+    const [formHeader, setFormHeader] = useState(null)
     const [dialogType, setDialogType] = useState(null)
 
     const dialogContext = useMemo(() => ({
         setDialogType,
     }), [setDialogType])
 
-    const modalContext = useMemo(() => ({
-        setModalType,
-        setModalHeader
-    }), [setModalType, setModalHeader])
+    const formContext = useMemo(() => ({
+        setFormType,
+        setFormHeader
+    }), [setFormType, setFormHeader])
 
-    const closeModal = () => {
+    const closeForm = () => {
         setModalType(null)
     }
 
     return (
         <DialogContext.Provider value={dialogContext}>
-            <ModalContext.Provider value={modalContext}>
+            <ModalContext.Provider value={formContext}>
             <div className="h-full grid grid-rows-12 grid-cols-12 w-full">
                 <Header className="row-start-[1] row-end-[3] col-start-[1] col-end-[13]" main_msg={main_msg} sub_msg={sub_msg} button={headerButton}></Header>
                 <div className="row-start-[3] row-end-[13] col-start-[1] col-end-[13]">
-                    <Outlet context={{setHeaderButton, setModalType, setModalHeader}} className="row-start-[3] row-end-[13] col-start-[1] col-end-[13]"/>
+                    <Outlet context={{headerButton, setHeaderButton, formType, setFormType, formHeader, setFormHeader, dialogType, setDialogType}} className="row-start-[3] row-end-[13] col-start-[1] col-end-[13]"/>
                 </div>
-                {
-                    modalType && (
-                        <BaseForm onClose={closeModal} display={modalType} displayName={modalHeader}>
-                            {modalType}
-                        </BaseForm>
-                    )
-                }
-                {dialogType}
             </div>
             </ModalContext.Provider>
         </DialogContext.Provider>
