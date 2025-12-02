@@ -20,7 +20,7 @@ const darkTheme = createTheme({
   },
 });
 
-export default function TranscDatePicker() {
+export default function TranscDatePicker({input_state, input_setter}) {
   const [selectedDate, setSelectedDate] = useState(null);
 
   // 3. The parent Field is flex-col. 'grow' makes this component
