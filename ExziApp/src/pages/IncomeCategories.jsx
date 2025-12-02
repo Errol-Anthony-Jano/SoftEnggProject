@@ -1,9 +1,12 @@
-import { useEffect, useCallback, useState} from "react"
+import { useEffect, useCallback, useState, useMemo} from "react"
 import { useOutletContext } from "react-router"
 import Button from "../components/Button"
-import { ModalContext } from "../contexts/ModalContext"
 import CategoryForm from "../components/forms_general/CategoryForm.jsx"
 import BaseCard from "../components/cards/BaseCard.jsx"
+import BaseForm from "../components/forms_general/BaseForm.jsx"
+import BaseDialog from "../components/dialogs/BaseDialog.jsx"
+import { FormActionContext } from "../contexts/contexts.js"
+import AddIncomeCategoryForm from "../components/forms_general/IncomeCategories/AddIncomeCategoryForm.jsx"
 
 
 const categories = [
@@ -65,29 +68,60 @@ const categories = [
   }
 ];
 
+const FormActionProvider = ({children, value}) => {
+  return (
+    <FormActionContext.Provider value={value}>
+      {children}
+    </FormActionContext.Provider>
+  )
+}
+
 const IncomeCategories = () => {
-    const { setHeaderButton, setModalType, setModalHeader } = useOutletContext()
+    const {headerButton, setHeaderButton, formType, setFormType, setFormHeader, dialogType, setDialogType} = useOutletContext()
     const [displayMode, setDisplayMode] = useState("monthly")
-    
-    const openAddModal = useCallback(() => {
-        setModalType(<CategoryForm type="income" mode="add" name_label="Enter name" icon_pick_label="Select icon"/>)
-        setModalHeader('Add income category')
-    }, [setModalType, setModalHeader])
+
+    const openSubmitDialog = useCallback(() => {
+        setDialogType(
+          <BaseDialog 
+                dialog_type="Confirm" 
+                icon="❓" 
+                message="Are you sure to add this category?" 
+                onClose={() => setDialogType(null)}
+          />
+        )
+    }, [setDialogType])
+
+    const closeForm = useCallback(() => {
+      setFormType(null)
+    }, [setFormType])
+
+    const formActions = useMemo(() => ({
+      openSubmitDialog,
+      closeForm
+    }), [openSubmitDialog, closeForm])
+
+    const openAddForm = useCallback(() => {
+      const formWithContext = (
+        <FormActionProvider value={formActions}>
+          <AddIncomeCategoryForm />
+        </FormActionProvider>
+      )
+
+      setFormType(formWithContext)
+      setFormHeader('Add category')
+    }, [setFormType, setFormHeader, formActions])
 
     useEffect(() => {
-        const addButton = <Button text="➕ Add income category" onClick={openAddModal} />
+        const addButton = <Button text="➕ Add income category" onClick={openAddForm} />
         setHeaderButton(addButton)
 
         return () => {
             setHeaderButton(null)
         }
-    }, [setHeaderButton, openAddModal])
-
-    const toggleMode = useCallback((mode) => {
-      setDisplayMode(mode)
-    }, [setDisplayMode])
+    }, [setHeaderButton, openAddForm])
 
     return (
+      <>
         <main className="flex flex-wrap gap-6 p-4">
             {categories.map((category) => (
                 <BaseCard 
@@ -98,6 +132,14 @@ const IncomeCategories = () => {
                 />
             ))}
         </main>
+        {
+          formType && (
+            <BaseForm onClose={() => setFormType(null)} display={formType} displayName="Add category"/>
+          )
+        }
+        { dialogType }
+      </>  
+        
     )
 }
 

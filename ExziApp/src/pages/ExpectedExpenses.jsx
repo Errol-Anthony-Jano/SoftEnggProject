@@ -4,6 +4,7 @@ import Button from "../components/Button.jsx"
 import { ModalContext } from "../contexts/ModalContext.js"
 import TransactionForm from "../components/forms_general/TransactionForm.jsx"
 import ExpectedExpenseCard from "../components/cards/ExpectedExpenseCard.jsx"
+import BaseForm from "../components/forms_general/BaseForm.jsx"
 
 const expected_expenses = [
   {
@@ -79,26 +80,32 @@ const expected_expenses = [
 ]
 
 const ExpectedExpenses = () => {
-    const {setHeaderButton, setModalType, setModalHeader} = useOutletContext()
+    const {headerButton, setHeaderButton, formType, setFormType, setFormHeader, dialogType, setDialogType} = useOutletContext()
 
-    const openExpectedExpenseModal = useCallback(() => {
-        setModalType(<TransactionForm transaction_type="expected_expense" inc_cat_label="Select income source" exp_dst_label="Select category"/>)
-        setModalHeader("Add expected expense")
-    }, [setModalHeader, setModalType])
+    const openExpectedExpenseForm = useCallback(() => {
+        setFormType(<TransactionForm transaction_type="expected_expense" inc_cat_label="Select income source" exp_dst_label="Select category"/>)
+        setFormHeader("Add expected expense")
+    }, [setFormHeader, setFormType])
 
-    const modalContext = useMemo(() => ({
-      setModalType, 
-      setModalHeader
-    }), [setModalHeader, setModalType])
+    const openSubmitDialog = () => {
+      setDialogType(
+        <BaseDialog 
+          dialog_type="Confirm" 
+          icon="❓" 
+          message="Are you sure to add this reserved expense?" 
+          onClose={() => setDialogType(null)}
+        />
+      )
+    }
 
     useEffect(() => {
-        const addExpectedExpenseButton = <Button text="📅 Add expected expense" onClick={openExpectedExpenseModal}></Button>
+        const addExpectedExpenseButton = <Button text="📅 Add expected expense" onClick={openExpectedExpenseForm}></Button>
         setHeaderButton(addExpectedExpenseButton)
 
         return () => {
             setHeaderButton(null)
         }
-    }, [setHeaderButton, openExpectedExpenseModal])
+    }, [setHeaderButton, openExpectedExpenseForm])
 
     return (
         <main className="h-full w-full overflow-y-scroll">
@@ -119,6 +126,12 @@ const ExpectedExpenses = () => {
                     ))
                 }
             </div>
+            {
+                formType && (
+                  <BaseForm onClose={() => setFormType(null)} display={formType} displayName="Add reserved expense" submitTrigger={openSubmitDialog}/>
+                )
+            }
+            { dialogType }
         </main>
     )
 }

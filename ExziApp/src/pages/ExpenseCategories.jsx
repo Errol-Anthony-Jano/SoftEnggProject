@@ -4,6 +4,7 @@ import CategoryForm from "../components/forms_general/CategoryForm.jsx"
 import Button from "../components/Button"
 import { ModalContext } from "../contexts/ModalContext"
 import BaseCard from "../components/cards/BaseCard.jsx"
+import BaseForm from "../components/forms_general/BaseForm.jsx"
 
 const categories = [
   {
@@ -69,28 +70,40 @@ const categories = [
 ]
 
 const ExpenseCategories = () => {
-    const { setHeaderButton, setModalType, setModalHeader } = useOutletContext()
+    const {headerButton, setHeaderButton, formType, setFormType, setFormHeader, dialogType, setDialogType} = useOutletContext()
     const [displayMode, setDisplayMode] = useState("monthly")
   
-    const openAddModal = useCallback(() => {
-        setModalType(<CategoryForm type="expense" mode="add" name_label="Enter name" icon_pick_label="Select icon"/>)
-        setModalHeader('Add expense category')
-    }, [setModalType, setModalHeader])
+    const openAddForm = useCallback(() => {
+        setFormType(<CategoryForm type="expense" mode="add" name_label="Enter name" icon_pick_label="Select icon"/>)
+        setFormHeader('Add expense category')
+    }, [setFormType, setFormHeader])
+
+    const openSubmitDialog = useCallback(() => {
+        setDialogType(
+          <BaseDialog 
+                dialog_type="Confirm" 
+                icon="❓" 
+                message="Are you sure to add this category?" 
+                onClose={() => setDialogType(null)}
+          />
+        )
+    })
        
     useEffect(() => {
-        const addButton = <Button text="➕ Add expense category" onClick={openAddModal} />
+        const addButton = <Button text="➕ Add expense category" onClick={openAddForm} />
         setHeaderButton(addButton)
 
         return () => {
             setHeaderButton(null)
         }
-    }, [setHeaderButton, openAddModal])
+    }, [setHeaderButton, openAddForm])
 
     const toggleMode = useCallback((mode) => {
       setDisplayMode(mode)
     }, [setDisplayMode])
 
     return (
+      <>
         <main className="flex flex-wrap gap-6 p-4">
             {categories.map((category) => (
                 <BaseCard
@@ -101,6 +114,12 @@ const ExpenseCategories = () => {
                 />
             ))}
         </main>
+        {
+          formType && (
+            <BaseForm onClose={() => setFormType(null)} display={formType} displayName="Add category" submitTrigger={openSubmitDialog}/>
+          )
+        }
+      </>
     )
 }
 
