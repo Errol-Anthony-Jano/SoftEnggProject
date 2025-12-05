@@ -48,7 +48,7 @@ const AddIncomeCategoryForm = ({mode, initial_data, closeForm, finalSubmit}) => 
     // Determine the initial icon: Use existing data if in update mode, otherwise use the default icon.
     const initialIcon = (mode === 'update' && initial_data) ? initial_data.emoji : emojiIcons[0];
 
-
+    const [categoryName, setCategoryName] = useState(initialName)
     const [currIcon, selectIcon] = useState(initialIcon)
 
     const handleCreate = (e) => {
