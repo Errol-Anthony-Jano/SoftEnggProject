@@ -16,10 +16,10 @@ import {
 } from "../components/forms_general/FormAtoms.js"
 
 import {
-    categoryListAtom,    // <-- New Import
+    expenseCategoryListAtom,    // <-- New Import
     addCategoryAtom,
     updateCategoryAtom     // <-- New Import
-} from "../components/forms_general/IncomeCategories/CategoryAtoms.js" // Verify path
+} from "../components/forms_general/ExpenseCategories/ExpenseCategoryAtoms.js" // Verify path
 
 const ExpenseCategories = () => {
     const {setHeaderButton} = useOutletContext()
@@ -28,7 +28,7 @@ const ExpenseCategories = () => {
     const formHeader = useAtomValue(formHeaderAtom)
     const dialogType = useAtomValue(dialogContentAtom)
 
-    const [categoryList, setCategoryList] = useAtom(categoryListAtom)
+    const [categoryList, setCategoryList] = useAtom(expenseCategoryListAtom)
     
     const setFormContent = useSetAtom(formContentAtom)
     const setFormHeader = useSetAtom(formHeaderAtom)
