@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { format } from 'date-fns';
+import { format, isValid } from 'date-fns';
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react';
 
 // 1. Import the *Static* DatePicker
@@ -21,8 +21,6 @@ const darkTheme = createTheme({
 });
 
 export default function TranscDatePicker({input_state, input_setter}) {
-  const [selectedDate, setSelectedDate] = useState(null);
-
   // 3. The parent Field is flex-col. 'grow' makes this component
   //    fill the remaining vertical space.
   return (
@@ -33,7 +31,9 @@ export default function TranscDatePicker({input_state, input_setter}) {
                the 'grow' Popover container. */}
           <PopoverButton className="flex items-center justify-between w-full h-full px-3 py-2 text-left text-white bg-transparent border border-[#646464] rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
             <span>
-              {selectedDate ? format(selectedDate, 'MM/dd/yyyy') : 'Select a date'}
+              {input_state && isValid(input_state) 
+              ? format(input_state, 'MM/dd/yyyy') 
+              : 'Select a date'}
             </span>
           </PopoverButton>
 
@@ -47,9 +47,9 @@ export default function TranscDatePicker({input_state, input_setter}) {
             <ThemeProvider theme={darkTheme}>
               <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <StaticDatePicker
-                  value={selectedDate}
+                  value={input_state}
                   onChange={(newDate) => {
-                    setSelectedDate(newDate);
+                    input_setter(newDate);
                     close(); // This closes the popover on selection
                   }}
                   onAccept={() => close()}
