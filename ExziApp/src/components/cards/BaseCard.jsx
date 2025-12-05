@@ -1,8 +1,9 @@
 //DO NOT DELETE
 import { VscKebabVertical } from "react-icons/vsc"
-import BaseMenu from "../menus/BaseMenu.jsx"
+import { VscTrash, VscEdit } from "react-icons/vsc";
 
-const BaseCard = ({type, income_cat, expense_cat, display_mode}) => {
+
+const BaseCard = ({type, income_cat, expense_cat, display_mode, edit, del}) => {
     const categoryObject = income_cat ?? expense_cat
 
     const display = {
@@ -11,8 +12,8 @@ const BaseCard = ({type, income_cat, expense_cat, display_mode}) => {
         icon: income_cat?.emoji || expense_cat?.emoji,
         monthlyIncome: income_cat?.monthly_income,
         totalIncome: income_cat?.total_income,
-        monthlyExpense: expense_cat?.monthly_expense ?? "n/a",
-        totalExpense: expense_cat?.total_expense ?? "n/a",
+        monthlyExpense: expense_cat?.monthly_expense ?? 0,
+        totalExpense: expense_cat?.total_expense ?? 0,
         isBudget: expense_cat?.isBudget ?? "n/a",
         spendLimit: expense_cat?.totalBudget ?? "n/a"
     }
@@ -40,7 +41,8 @@ const BaseCard = ({type, income_cat, expense_cat, display_mode}) => {
     
     const renderExpenseInformation = (type, display_mode) => {
         if (type === 'expense') {
-            if (display_mode === 'monthly' && display.isBudget === true) {
+            console.log(display.isBudget)
+            if (display.isBudget === true) {
                 return (
                     <>
                         <h3>Spent this month</h3>
@@ -48,7 +50,7 @@ const BaseCard = ({type, income_cat, expense_cat, display_mode}) => {
                     </>
                 )
             }
-            else if (display_mode === 'monthly' && display.isBudget === false) {
+            else {
                 return (
                     <>
                         <h3>Spent this month</h3>
@@ -56,19 +58,15 @@ const BaseCard = ({type, income_cat, expense_cat, display_mode}) => {
                     </>
                 )
             }
-            else {
-                return (
-                    <>
-                        <h3>Total spent</h3>
-                        <p>{display.totalExpense}</p>
-                    </>
-                )
-            }
         }
     }
-
+   
     return (
-        <div className="flex flex-col bg-[#0d1518] rounded-lg w-1/5 h-1/5 p-4 gap-4">
+        <div className="flex flex-col bg-[#0d1518] rounded-lg min-w-[20%] max-h-[30%] p-4 gap-2">
+            <div className="w-full flex flex-row-reverse gap-4">
+                <button onClick={del}><VscTrash /></button>
+                <button onClick={edit}><VscEdit /></button>
+            </div>
             <div className="flex w-full justify-between items-center gap-4">
                 <div className="flex items-center gap-4">
                     <div className="bg-[#101a1e] rounded-lg p-2 text-[2rem]">
@@ -76,7 +74,6 @@ const BaseCard = ({type, income_cat, expense_cat, display_mode}) => {
                     </div>
                     <p>{display.name}</p>
                 </div>
-                <BaseMenu button={VscKebabVertical} category_type={type} category_obj={categoryObject}/>
             </div>
             <div>
                 {renderIncomeInformation(type, display_mode)}
