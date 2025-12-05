@@ -41,11 +41,41 @@ const emojiIcons = [
   "📎", "✏️", "🕊️", "🙏"
 ];
 
-const AddIncomeCategoryForm = () => {
-    const [currIcon, selectIcon] = useState(emojiIcons[0])
-    const [categoryName, setCategoryName] = useState('')
+const AddIncomeCategoryForm = ({mode, initial_data, closeForm, finalSubmit}) => {
+
+    const initialName = (mode === 'update' && initial_data) ? initial_data.categoryName : '';
     
-    const {openSubmitDialog, closeForm} = useContext(FormActionContext)
+    // Determine the initial icon: Use existing data if in update mode, otherwise use the default icon.
+    const initialIcon = (mode === 'update' && initial_data) ? initial_data.emoji : emojiIcons[0];
+
+
+    const [currIcon, selectIcon] = useState(initialIcon)
+
+    const handleCreate = (e) => {
+        e.preventDefault()
+
+        let formData; 
+
+        if (mode === 'add') {
+            formData = {
+                categoryName: categoryName,
+                emoji: currIcon,
+                mode: mode,
+                type: "income",
+            }
+        }
+        else if (mode === 'update') {
+            formData = {
+                id: initial_data.id,
+                categoryName: categoryName,
+                emoji: currIcon,
+                mode: mode,
+                type: "income",
+            }
+        }
+
+        finalSubmit(formData);
+    }
 
     return (
         <div className="h-full flex flex-col gap-4 p-4">
@@ -54,7 +84,7 @@ const AddIncomeCategoryForm = () => {
                 <IconPicker type="income" icon_pick_label="Select icon" input_state={currIcon} input_setter={selectIcon}/>
             </div>
             <div className="flex gap-4 h-[10%] justify-center items-center">
-                <button className="w-1/4 p-2 bg-white text-black rounded-sm" type="button" onClick={openSubmitDialog}>Submit</button>
+                <button className="w-1/4 p-2 bg-white text-black rounded-sm" type="button" onClick={handleCreate}>Submit</button>
                 <button className="w-1/4 p-2 rounded-sm border border-white" onClick={closeForm}>Cancel</button>
             </div>
         </div>
