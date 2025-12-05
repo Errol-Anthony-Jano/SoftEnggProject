@@ -39,31 +39,38 @@ const emojiIcons = [
   "📎", "✏️", "🕊️", "🙏"
 ];
 
-export const CategoryNameField = ({name_label}) => {
+export const CategoryNameField = ({name_label, input_state, input_setter}) => {
+
+    const handleChange = (e) => {
+        input_setter(e.target.value)
+    }
+
     return (
         <Field as="div" className="flex flex-col gap-2 w-full shrink-0">
             <label>{name_label}</label>
-            <Input className="p-4 border border-[#646464] rounded-sm hover:border hover:border-white hover:transition duration-300 ease-in-out h-full"/>
+            <Input className="p-4 border border-[#646464] rounded-sm hover:border hover:border-white hover:transition duration-300 ease-in-out h-full" value={input_state} onChange={handleChange}/>
         </Field>
     )
 }
 
-export const IconPicker = ({type, icon_pick_label}) => {
-    const [currentIcon, setCurrentIcon] = useState(emojiIcons[0])
+export const IconPicker = ({type, icon_pick_label, input_state, input_setter}) => {
     return (
-        <Field as="div" className={`flex flex-col min-h-0`}>
+        <Field as="div" className={`flex flex-col min-h-0 grow`}>
             <label>{icon_pick_label}</label>
             <div className="w-full flex flex-wrap overflow-y-scroll gap-2 p-4 grow">
                 {emojiIcons.map((icon) => (
-                    <button onClick={() => setCurrentIcon(icon)} key={icon} className={`${icon === currentIcon ? 'bg-blue-300' : ''} text-4xl hover:bg-[#101a1e] rounded-sm`} type="button">{icon}</button>
+                    <button onClick={() => input_setter(icon)} key={icon} className={`${icon === input_state ? 'bg-blue-300' : ''} text-4xl hover:bg-[#101a1e] rounded-sm`} type="button">{icon}</button>
                 ))}
             </div>
         </Field>
     )
 }
 
-export const BudgetSetter = ({budget_set_label, budget_enter_amount}) => {
-    const [enabled, setEnabled] = useState(false)
+export const BudgetSetter = ({switch_state, switch_setter, budget_state, budget_setter, budget_set_label, budget_enter_amount}) => {
+
+    const handleChange = (e) => {
+        budget_setter(e.target.value)
+    }
 
     return (
         <div className="flex justify-between items-center shrink-0 w-full bg-[#0d1518] rounded-lg p-2">
@@ -71,16 +78,20 @@ export const BudgetSetter = ({budget_set_label, budget_enter_amount}) => {
                 <Field as="div" className="flex w-1/2 justify-around items-center">
                     <label>{budget_set_label}</label>
                     <Switch
-                        checked={enabled}
-                        onChange={setEnabled}
+                        checked={switch_state}
+                        onChange={switch_setter}
                         className="group inline-flex h-6 w-11 items-center rounded-full bg-gray-200 transition data-checked:bg-blue-600"
                     >
                         <span className="size-4 translate-x-1 rounded-full bg-white transition group-data-checked:translate-x-6" />
                     </Switch>
                 </Field>
-                <Field disabled={!enabled} as="div" className="flex flex-col w-1/2">
+                <Field disabled={!switch_state} as="div" className="flex flex-col w-1/2">
                     <Label>{budget_enter_amount}</Label>
-                    <Input className="p-1 border border-[#646464] rounded-sm hover:border hover:border-white hover:transition duration-300 ease-in-out"></Input>
+                    <Input 
+                        type="number" 
+                        value={budget_state}
+                        onChange={handleChange}
+                        className="p-1 border border-[#646464] rounded-sm hover:border hover:border-white hover:transition duration-300 ease-in-out"></Input>
                 </Field>
             </Fieldset>
         </div>
