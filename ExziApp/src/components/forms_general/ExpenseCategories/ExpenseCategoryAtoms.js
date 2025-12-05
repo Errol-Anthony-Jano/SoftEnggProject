@@ -52,7 +52,7 @@ const categories = [
   }
 ]
 
-export const categoryListAtom = atom(categories)
+export const expenseCategoryListAtom = atom(categories)
 
 const getLastID = (categoryList) => {
     const maxID = Math.max(...categoryList.map(cat => cat.id));
@@ -60,20 +60,20 @@ const getLastID = (categoryList) => {
 }
 
 export const addCategoryAtom = atom(null, (get, set, formData) => {
-    const prevCategories = get(categoryListAtom)
+    const prevCategories = get(expenseCategoryListAtom)
     const newCategory = {
         ...formData, 
         id: getLastID(prevCategories),
         currentSpend: 0
     };
 
-    set(categoryListAtom, [...prevCategories, newCategory])
+    set(expenseCategoryListAtom, [...prevCategories, newCategory])
     set(dialogContentAtom, null)
 })
 
 export const updateCategoryAtom = atom(null, (get, set, formData) => {
     const updatedCategoryID = formData.id
-        set(categoryListAtom, prevCategories => (
+        set(expenseCategoryListAtom, prevCategories => (
             prevCategories.map(category => {
                 if (category.id === updatedCategoryID) {
                     return { ...category, ...formData };
