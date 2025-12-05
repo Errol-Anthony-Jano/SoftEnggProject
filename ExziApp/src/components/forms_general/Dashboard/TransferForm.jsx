@@ -28,7 +28,7 @@ const TransferForm = () => {
                 </div>
                 <Field as="div" className="flex flex-col shrink-0">
                         <label>Enter amount</label>
-                        <Input value={amount} onChange={(e) => setAmount(e.target.value)} className="p-4 border border-[#646464] rounded-sm hover:border hover:border-white hover:transition duration-300 ease-in-out grow"/>
+                        <Input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} className="p-4 border border-[#646464] rounded-sm hover:border hover:border-white hover:transition duration-300 ease-in-out grow"/>
                 </Field>
                 <Field as="div" className="flex flex-col shrink-0 grow">
                     <label>Enter note</label>
