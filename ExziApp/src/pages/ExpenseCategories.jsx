@@ -1,93 +1,107 @@
-import { useEffect, useCallback, useState } from "react"
+import { useEffect, useCallback, useState, useMemo } from "react"
 import { useOutletContext } from "react-router"
 import CategoryForm from "../components/forms_general/CategoryForm.jsx"
 import Button from "../components/Button"
 import { ModalContext } from "../contexts/ModalContext"
 import BaseCard from "../components/cards/BaseCard.jsx"
 import BaseForm from "../components/forms_general/BaseForm.jsx"
+import AddExpenseCategoryForm from "../components/forms_general/ExpenseCategories/AddExpenseCategoryForm.jsx"
+import { FormActionContext } from "../contexts/contexts.js"
+import BaseDialog from "../components/dialogs/BaseDialog.jsx"
+import {atom, useAtom, useSetAtom, useAtomValue } from "jotai"
 
-const categories = [
-  {
-    "key": 2,
-    "categoryName": "Food",
-    "categoryType": "Expense",
-    "currentBalance": 800,
-    "emoji": "🍔",
-    "isBudget": false,
-    "totalBudget": 0,
-    "currentSpend": 0
-  },
-  {
-    "key": 3,
-    "categoryName": "Rent",
-    "categoryType": "Expense",
-    "currentBalance": 1650,
-    "emoji": "🏠",
-    "isBudget": false,
-    "totalBudget": 0,
-    "currentSpend": 0
-  },
-  {
-    "key": 4,
-    "categoryName": "Transport",
-    "categoryType": "Expense",
-    "currentBalance": 250,
-    "emoji": "🚗",
-    "isBudget": false,
-    "totalBudget": 0,
-    "currentSpend": 0
-  },
-  {
-    "key": 5,
-    "categoryName": "Utilities",
-    "categoryType": "Expense",
-    "currentBalance": 180,
-    "emoji": "💡",
-    "isBudget": true,
-    "totalBudget": 0,
-    "currentSpend": 0
-  },
-  {
-    "key": 6,
-    "categoryName": "Subscriptions",
-    "categoryType": "Expense",
-    "currentBalance": 75,
-    "emoji": "📺",
-    "isBudget": true,
-    "totalBudget": 0,
-    "currentSpend": 0
-  },
-  {
-    "key": 7,
-    "categoryName": "Entertainment",
-    "categoryType": "Expense",
-    "currentBalance": 200,
-    "emoji": "🎬",
-    "isBudget": true,
-    "totalBudget": 0,
-    "currentSpend": 0
-  }
-]
+import {
+    formContentAtom,
+    formHeaderAtom,
+    dialogContentAtom,
+} from "../components/forms_general/FormAtoms.js"
+
+import {
+    categoryListAtom,    // <-- New Import
+    addCategoryAtom,
+    updateCategoryAtom     // <-- New Import
+} from "../components/forms_general/IncomeCategories/CategoryAtoms.js" // Verify path
 
 const ExpenseCategories = () => {
-    const {headerButton, setHeaderButton, formType, setFormType, setFormHeader, dialogType, setDialogType} = useOutletContext()
-    const [displayMode, setDisplayMode] = useState("monthly")
-  
-    const openAddForm = useCallback(() => {
-        setFormType(<CategoryForm type="expense" mode="add" name_label="Enter name" icon_pick_label="Select icon"/>)
-        setFormHeader('Add expense category')
-    }, [setFormType, setFormHeader])
+    const {setHeaderButton} = useOutletContext()
 
-    const openSubmitDialog = useCallback(() => {
+    const formContent = useAtomValue(formContentAtom)
+    const formHeader = useAtomValue(formHeaderAtom)
+    const dialogType = useAtomValue(dialogContentAtom)
+
+    const [categoryList, setCategoryList] = useAtom(categoryListAtom)
+    
+    const setFormContent = useSetAtom(formContentAtom)
+    const setFormHeader = useSetAtom(formHeaderAtom)
+    const setDialogType = useSetAtom(dialogContentAtom)
+
+    const closeForm = useCallback(() => {
+        setFormContent(null)
+    }, [setFormContent])
+
+    const createCategory = useSetAtom(addCategoryAtom)
+    const updateCategory = useSetAtom(updateCategoryAtom)
+
+
+    const handleDelete = useCallback((categoryObject) => {
+        setCategoryList(prevCategories => 
+          prevCategories.filter(cat => cat.id !== categoryObject.id)
+        );
+
+        setDialogType(null)
+    }, [setCategoryList, setDialogType])
+
+    const openDeleteDialog = useCallback((categoryObject) => {
+        const confirmDeleteAction = () => {
+            handleDelete(categoryObject)
+        }
+    
         setDialogType(
-          <BaseDialog 
-                dialog_type="Confirm" 
-                icon="❓" 
-                message="Are you sure to add this category?" 
+            <BaseDialog 
+                dialog_type="Warning"
+                icon="🗑️"
+                message={`Are you sure you want to delete ${categoryObject.categoryName}? All expenses will be transferred to Uncategorized.`}
                 onClose={() => setDialogType(null)}
-          />
+                onConfirm={confirmDeleteAction}
+                onCancel={() => setDialogType(null)}
+            />
         )
-    })
+    }, [setDialogType, handleDelete])
+    
+    const finalSubmit = useCallback((formData) => { // ⬅️ Accepts data from the form
+        if (formData.mode === 'create') {
+            createCategory(formData); // Call your creation logic
+        } 
+        else if (formData.mode === 'update') {
+            updateCategory(formData)
+        }
+    
+        closeForm(); 
+    }, [createCategory, updateCategory, closeForm]);
+    
+    const openAddForm = useCallback(() => {
+      setFormContent(
+          <AddExpenseCategoryForm
+              mode="create"
+              closeForm={closeForm}
+              finalSubmit={finalSubmit}
+          />
+      )
+      setFormHeader('Add category')
+    }, [setFormContent, setFormHeader])
+
+    const openUpdateForm = useCallback((categoryObject, type) => {
+      setFormContent(
+          <AddExpenseCategoryForm 
+              mode="update"
+              initial_data={categoryObject} 
+              closeForm={closeForm}
+              finalSubmit={finalSubmit}
+          />
+      )
+      setFormHeader('Update category')
+    }, [setFormContent, setFormHeader])
+    
        
     useEffect(() => {
         const addButton = <Button text="➕ Add expense category" onClick={openAddForm} />
@@ -98,27 +112,25 @@ const ExpenseCategories = () => {
         }
     }, [setHeaderButton, openAddForm])
 
-    const toggleMode = useCallback((mode) => {
-      setDisplayMode(mode)
-    }, [setDisplayMode])
-
     return (
       <>
-        <main className="flex flex-wrap gap-6 p-4">
-            {categories.map((category) => (
+        <main className="flex flex-wrap gap-6 p-4 overflow-y-scroll h-full">
+            {categoryList.map((category) => (
                 <BaseCard
-                    key={category.key} 
+                    key={category.id} 
                     type="expense"
                     expense_cat={category}
-                    display_mode={displayMode}
+                    edit={() => openUpdateForm(category, "expense")}
+                    del={() => openDeleteDialog(category)}
                 />
             ))}
         </main>
         {
-          formType && (
-            <BaseForm onClose={() => setFormType(null)} display={formType} displayName="Add category" submitTrigger={openSubmitDialog}/>
+          formContent && (
+            <BaseForm onClose={() => setFormContent(null)} display={formContent} displayName={formHeader} />
           )
         }
+        { dialogType }
       </>
     )
 }

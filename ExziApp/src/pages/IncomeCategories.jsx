@@ -1,115 +1,107 @@
 import { useEffect, useCallback, useState, useMemo} from "react"
 import { useOutletContext } from "react-router"
 import Button from "../components/Button"
-import CategoryForm from "../components/forms_general/CategoryForm.jsx"
 import BaseCard from "../components/cards/BaseCard.jsx"
 import BaseForm from "../components/forms_general/BaseForm.jsx"
 import BaseDialog from "../components/dialogs/BaseDialog.jsx"
 import { FormActionContext } from "../contexts/contexts.js"
 import AddIncomeCategoryForm from "../components/forms_general/IncomeCategories/AddIncomeCategoryForm.jsx"
+import {atom, useAtom, useSetAtom, useAtomValue } from "jotai"
 
+import {
+    formContentAtom,
+    formHeaderAtom,
+    dialogContentAtom,
+} from "../components/forms_general/FormAtoms.js"
 
-const categories = [
-  {
-    id: 1,
-    categoryName: 'Salary',
-    categoryType: 'Income',
-    total_income: 5200,
-    emoji: '💵',
-  },
-  {
-    id: 2,
-    categoryName: 'Food',
-    categoryType: 'Expense', // Changed from 'Income' as it's a more common use case
-    total_income: 800,
-    emoji: '🍔',
-  },
-  {
-    id: 3,
-    categoryName: 'Rent',
-    categoryType: 'Expense',
-    total_income: 1650,
-    emoji: '🏠',
-  },
-  {
-    id: 4,
-    categoryName: 'Transport',
-    categoryType: 'Expense',
-    total_income: 250,
-    emoji: '🚗',
-  },
-  {
-    id: 5,
-    categoryName: 'Utilities',
-    categoryType: 'Expense',
-    total_income: 180,
-    emoji: '💡',
-  },
-  {
-    id: 6,
-    categoryName: 'Subscriptions',
-    categoryType: 'Expense',
-    total_income: 75,
-    emoji: '📺',
-  },
-  {
-    id: 7,
-    categoryName: 'Entertainment',
-    categoryType: 'Expense',
-    total_income: 200,
-    emoji: '🎬',
-  },
-  {
-    id: 8,
-    categoryName: 'Freelance',
-    categoryType: 'Income',
-    total_income: 600,
-    emoji: '💼',
-  }
-];
-
-const FormActionProvider = ({children, value}) => {
-  return (
-    <FormActionContext.Provider value={value}>
-      {children}
-    </FormActionContext.Provider>
-  )
-}
+import {
+    categoryListAtom,    // <-- New Import
+    addCategoryAtom,
+    updateCategoryAtom     // <-- New Import
+} from "../components/forms_general/IncomeCategories/CategoryAtoms.js" // Verify path
 
 const IncomeCategories = () => {
-    const {headerButton, setHeaderButton, formType, setFormType, setFormHeader, dialogType, setDialogType} = useOutletContext()
-    const [displayMode, setDisplayMode] = useState("monthly")
+    const {setHeaderButton} = useOutletContext()
 
-    const openSubmitDialog = useCallback(() => {
-        setDialogType(
-          <BaseDialog 
-                dialog_type="Confirm" 
-                icon="❓" 
-                message="Are you sure to add this category?" 
-                onClose={() => setDialogType(null)}
-          />
-        )
-    }, [setDialogType])
+    const formContent = useAtomValue(formContentAtom)
+    const formHeader = useAtomValue(formHeaderAtom)
+    const dialogType = useAtomValue(dialogContentAtom)
 
+    const [categoryList, setCategoryList] = useAtom(categoryListAtom)
+    
+    const setFormContent = useSetAtom(formContentAtom)
+    const setFormHeader = useSetAtom(formHeaderAtom)
+    const setDialogType = useSetAtom(dialogContentAtom)
+
+    
     const closeForm = useCallback(() => {
-      setFormType(null)
-    }, [setFormType])
+      setFormContent(null)
+    }, [setFormContent])
 
-    const formActions = useMemo(() => ({
-      openSubmitDialog,
-      closeForm
-    }), [openSubmitDialog, closeForm])
+    const createCategory = useSetAtom(addCategoryAtom)
+
+    const updateCategory = useSetAtom(updateCategoryAtom)
+
+    const handleDelete = useCallback((categoryObject) => {
+        setCategoryList(prevCategories => 
+          prevCategories.filter(cat => cat.id !== categoryObject.id)
+        );
+
+        setDialogType(null)
+    }, [setCategoryList, setDialogType])
+
+    const openDeleteDialog = useCallback((categoryObject) => {
+      const confirmDeleteAction = () => {
+        handleDelete(categoryObject)
+      }
+
+      setDialogType(
+        <BaseDialog 
+          dialog_type="Warning"
+          icon="🗑️"
+          message={`Are you sure you want to delete ${categoryObject.categoryName}? All funds will be transferred to Uncategorized.`}
+          onClose={() => setDialogType(null)}
+          onConfirm={confirmDeleteAction}
+          onCancel={() => setDialogType(null)}
+        />
+      )
+    }, [setDialogType, handleDelete])
+
+    const finalSubmit = useCallback((formData) => { // ⬅️ Accepts data from the form
+        let success = false;
+    
+        if (formData.mode === 'add') {
+            success = createCategory(formData); // Call your creation logic
+        } 
+        else if (formData.mode === 'update') {
+            success = updateCategory(formData)
+        }
+    
+        closeForm(); 
+    }, [createCategory, updateCategory, closeForm]);
 
     const openAddForm = useCallback(() => {
-      const formWithContext = (
-        <FormActionProvider value={formActions}>
-          <AddIncomeCategoryForm />
-        </FormActionProvider>
+      setFormContent(
+          <AddIncomeCategoryForm 
+              mode="add"
+              closeForm={closeForm}
+              finalSubmit={finalSubmit}
+          />
       )
-
-      setFormType(formWithContext)
       setFormHeader('Add category')
-    }, [setFormType, setFormHeader, formActions])
+    }, [setFormContent, setFormHeader])
+
+    const openUpdateForm = useCallback((categoryObject, type) => {
+      setFormContent(
+          <AddIncomeCategoryForm 
+              mode="update"
+              initial_data={categoryObject}
+              closeForm={closeForm}
+              finalSubmit={finalSubmit}
+          />
+      )
+      setFormHeader('Update category')
+    }, [setFormContent, setFormHeader])
 
     useEffect(() => {
         const addButton = <Button text="➕ Add income category" onClick={openAddForm} />
@@ -119,27 +111,26 @@ const IncomeCategories = () => {
             setHeaderButton(null)
         }
     }, [setHeaderButton, openAddForm])
-
     return (
       <>
-        <main className="flex flex-wrap gap-6 p-4">
-            {categories.map((category) => (
+        <main className="flex flex-wrap gap-6 p-4 overflow-y-scroll h-full">
+            {categoryList.map((category) => (
                 <BaseCard 
                     key={category.id}
                     type="income" 
                     income_cat={category}
-                    display_mode={displayMode}
+                    edit={() => openUpdateForm(category, "income")}
+                    del={() => openDeleteDialog(category)}
                 />
             ))}
         </main>
         {
-          formType && (
-            <BaseForm onClose={() => setFormType(null)} display={formType} displayName="Add category"/>
+          formContent && (
+            <BaseForm onClose={() => setFormContent(null)} display={formContent} displayName={formHeader}/>
           )
         }
         { dialogType }
       </>  
-        
     )
 }
 
