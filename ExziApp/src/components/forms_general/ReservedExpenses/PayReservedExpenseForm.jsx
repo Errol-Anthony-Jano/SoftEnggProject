@@ -12,11 +12,12 @@ const PayReservedExpenseForm = ({mode, initial_data, closeForm, finalSubmit}) =>
     const handleCreate = (e) => {
         e.preventDefault();
         const newAmount = Number(amount) + Number(initial_data.paid_so_far)
+        const currentPaid = Number(initial_data.amount)
         const formData = {
             id: initial_data.id,
             mode: mode,
             paid_so_far: newAmount,
-            is_paid: (newAmount === initial_data.amount) ? true : false
+            is_paid: (newAmount === currentPaid) ? true : false
         }
 
         finalSubmit(formData)
