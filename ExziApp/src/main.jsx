@@ -56,8 +56,8 @@ const router = createBrowserRouter([
             },
             {
               handle: {
-                main_msg: "Expected Expenses",
-                sub_msg: "Your schedules expenses",
+                main_msg: "Reserved Expenses",
+                sub_msg: "Your scheduled expenses",
               },
               path: 'expected_expenses',
               element: <ExpectedExpenses />
